@@ -31,7 +31,7 @@ function incrementBearer({ hash }: incrementBearerParams): string {
 
 function signHash({ user }: signParams): signReturn {
     //Creating a token, that expires in 1 hour
-    const hash = sign({ user }, process.env.JWT_SECRET, { expiresIn: '0.0000000001h' });
+    const hash = sign({ user }, process.env.JWT_SECRET, { expiresIn: '1h' });
     const bearer = incrementBearer({ hash });
 
     return { hash, bearer };
