@@ -1,5 +1,5 @@
 import { ErrorWithStats } from './../model/ErrorWithStats';
-import { VideoService } from '../../services/VideoService';
+import { VideoService } from '../services/VideoService';
 import { Request, Response } from 'express';
 
 const videoService = new VideoService();

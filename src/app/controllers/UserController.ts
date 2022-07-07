@@ -1,13 +1,13 @@
 import { ErrorWithStats } from '../model/ErrorWithStats';
-import { UserService } from './../../services/UserService';
+import { UserService } from '../services/UserService';
 import { Request, Response } from 'express';
 
 const userService = new UserService();
 
 export async function store(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const { email, password, userName } = req.body;
 
-    const result = await userService.createUser({ email, password });
+    const result = await userService.createUser({ email, password, userName });
 
     if (result instanceof ErrorWithStats) {
         return res.status(result.status).json({ error: { message: result.message } });

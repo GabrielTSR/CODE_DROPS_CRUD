@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import { User } from '../entity/User';
+import { removeBearer, verifyToken } from '../utils/tokenProvider';
 
 interface TokenPayload {
-    id: number;
+    user: User;
     iat: number;
     exp: number;
 }
@@ -15,11 +16,11 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
     }
 
     //Removing Bearer from the token
-    const token = authorization.replace('Bearer ', '').trim();
+    const token = removeBearer({ token: authorization });
     try {
-        const data = verify(token, process.env.JWT_SECRET);
-        const { id } = data as TokenPayload;
-        req.idUser = id;
+        const data = verifyToken({ token });
+        const { user } = data as TokenPayload;
+        req.user = user;
 
         return next();
     } catch {

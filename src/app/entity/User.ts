@@ -1,4 +1,13 @@
-import { Binary, Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import {
+    Binary,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    BeforeInsert,
+    BeforeUpdate,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 import { hashSync } from 'bcryptjs';
 
 @Entity('user')
@@ -8,6 +17,7 @@ export class User {
 
     @Column({
         length: 100,
+        unique: true,
     })
     email: string;
 
@@ -19,4 +29,29 @@ export class User {
     hashPassword() {
         this.password = hashSync(this.password, 8);
     }
+
+    @Column({
+        length: 255,
+        nullable: true,
+    })
+    avatar: string;
+
+    @Column({
+        name: 'user_name',
+        length: 50,
+    })
+    userName: string;
+
+    @Column({
+        name: 'permission_level',
+        type: 'smallint',
+        default: 0,
+    })
+    permission: number;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
 }

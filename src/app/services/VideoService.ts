@@ -1,6 +1,6 @@
-import { ErrorWithStats } from '../app/model/ErrorWithStats';
-import { categoryRepository, videoRepository } from '../app/entity/repositorys/repositorys';
-import { Video } from '../app/entity/Video';
+import { ErrorWithStats } from '../model/ErrorWithStats';
+import { categoryRepository, videoRepository } from '../entity/repositorys/repositorys';
+import { Video } from '../entity/Video';
 
 type VideoRequest = {
     name: string;

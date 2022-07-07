@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 import './database';
+import morgan from 'morgan';
 import express from 'express';
 import cors from 'cors';
 import { router } from './routes';
@@ -12,8 +13,11 @@ app.use(
         strict: false,
     })
 );
-app.use(router);
+//Morgan is a library to log requests
+app.use(morgan('dev'));
+
 app.use(cors());
+app.use(router);
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(3333, () => {

@@ -1,6 +1,6 @@
 import { ErrorWithStats } from './../model/ErrorWithStats';
 import { Request, Response } from 'express';
-import { CategoryService } from '../../services/CategoryService';
+import { CategoryService } from '../services/CategoryService';
 
 const categoryService = new CategoryService();
 

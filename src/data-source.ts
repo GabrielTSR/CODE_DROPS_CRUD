@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
     username: 'root',
     password: '12345678',
     database: 'code_drops_crud',
-    synchronize: false,
+    synchronize: true,
     logging: false,
     entities: ['src/app/entity/*.ts'],
     migrations: ['src/database/migrations/*.ts'],

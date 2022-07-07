@@ -1,6 +1,6 @@
-import { ErrorWithStats } from './../app/model/ErrorWithStats';
-import { Category } from './../app/entity/Category';
-import { categoryRepository } from '../app/entity/repositorys/repositorys';
+import { ErrorWithStats } from '../model/ErrorWithStats';
+import { Category } from '../entity/Category';
+import { categoryRepository } from '../entity/repositorys/repositorys';
 
 type createCategoryRequest = {
     name: string;
