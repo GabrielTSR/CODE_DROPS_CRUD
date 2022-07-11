@@ -5,9 +5,11 @@ import { CategoryService } from '../services/CategoryService';
 const categoryService = new CategoryService();
 
 async function getAllCategories(req: Request, res: Response) {
-    const categories = await categoryService.getAllCategories();
+    const result = await categoryService.getAllCategories();
 
-    return res.json(categories);
+    if (result instanceof ErrorWithStats) return res.status(result.status).json({ error: { message: result.message } });
+
+    return res.json(result);
 }
 
 async function createCategory(req: Request, res: Response) {

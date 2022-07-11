@@ -5,9 +5,11 @@ import { Request, Response } from 'express';
 const videoService = new VideoService();
 
 async function getAllVideos(req: Request, res: Response) {
-    const videos = await videoService.getAllVideos();
+    const result = await videoService.getAllVideos();
 
-    return res.json(videos);
+    if (result instanceof ErrorWithStats) return res.status(result.status).json({ error: { message: result.message } });
+
+    return res.json(result);
 }
 
 async function createVideo(req: Request, res: Response) {

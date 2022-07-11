@@ -23,12 +23,24 @@ export class User {
 
     @Column({ select: false })
     password: string;
-
     @BeforeInsert()
     @BeforeUpdate()
     hashPassword() {
-        this.password = hashSync(this.password, 8);
+        if (this.password) this.password = hashSync(this.password, 8);
     }
+
+    @Column({
+        length: 500,
+        nullable: true,
+        select: false,
+    })
+    password_reset_token: string;
+
+    @Column({
+        nullable: true,
+        select: false,
+    })
+    password_reset_expires: Date;
 
     @Column({
         length: 255,

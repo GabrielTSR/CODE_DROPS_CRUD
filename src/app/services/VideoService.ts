@@ -16,6 +16,8 @@ export class VideoService {
                 relations: ['category'],
             });
 
+            if (videos.length < 1) return new ErrorWithStats('No videos found!', 404);
+
             return videos;
         } catch (error) {
             return new ErrorWithStats(error.message, 400);

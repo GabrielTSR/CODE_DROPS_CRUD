@@ -16,7 +16,9 @@ type updateCategoryRequest = {
 export class CategoryService {
     async getAllCategories() {
         try {
-            const categories = categoryRepository.find();
+            const categories = await categoryRepository.find();
+
+            if (categories.length < 1) return new ErrorWithStats('No categories found!', 404);
 
             return categories;
         } catch (error) {
