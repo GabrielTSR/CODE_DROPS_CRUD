@@ -26,8 +26,11 @@ export class UserService {
         isCreation,
     }: validateDataParams): Promise<[string, number] | void> {
         try {
-            if (!email && isCreation) return ['Email is empty', 400];
-            if (!password && isCreation) return ['Password is too empty', 400];
+            if (isCreation) {
+                if (!email) return ['Email is empty', 400];
+                if (!password) return ['Password is too empty', 400];
+                if (!userName) return ['User name is empty', 400];
+            }
 
             if (email) {
                 if (!isEmailValid(email)) return ['Email is invalid', 400];
@@ -38,7 +41,6 @@ export class UserService {
                 if (!isPasswordValid(password)) return ['Password is invalid', 400];
             }
 
-            if (!userName && isCreation) return ['User name is empty', 400];
             if (userName) {
                 if (!userName.length && isCreation) return ['User name size is invalid', 400];
                 if (userName.length > 50) return ['User name is too long, the maximum is 50 characters', 400];

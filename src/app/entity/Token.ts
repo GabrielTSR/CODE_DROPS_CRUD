@@ -9,7 +9,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('token')
+@Entity('tbl_token')
 export class Token {
     @PrimaryGeneratedColumn({ name: 'id_token' })
     id: number;

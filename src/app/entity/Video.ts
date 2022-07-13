@@ -7,9 +7,12 @@ import {
     ManyToOne,
     JoinColumn,
     UpdateDateColumn,
+    ManyToMany,
+    JoinTable,
 } from 'typeorm';
+import { Studio } from './Studio';
 
-@Entity('video')
+@Entity('tbl_video')
 export class Video {
     @PrimaryGeneratedColumn({ name: 'id_video' })
     id: number;
@@ -28,6 +31,12 @@ export class Video {
     @Column({ name: 'duration_in_minutes' })
     duration: number;
 
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
     @Column()
     id_category: number;
 
@@ -35,11 +44,9 @@ export class Video {
     @JoinColumn({ name: 'id_category' })
     category: Category;
 
-    @CreateDateColumn()
-    created_at: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
+    @ManyToMany(() => Studio)
+    @JoinTable()
+    studios: Studio[];
 
     //In some database id may not auto-increment
     // constructor() {

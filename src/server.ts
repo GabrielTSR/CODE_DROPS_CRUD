@@ -17,6 +17,7 @@ app.use(
 app.use(morgan('dev'));
 
 app.use(cors());
+
 app.use(router);
 app.use(express.urlencoded({ extended: true }));
 

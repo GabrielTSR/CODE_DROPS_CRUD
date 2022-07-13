@@ -13,9 +13,9 @@ async function getAllVideos(req: Request, res: Response) {
 }
 
 async function createVideo(req: Request, res: Response) {
-    const { name, description, id_category, duration } = req.body;
+    const { name, description, id_category, duration, studios } = req.body;
 
-    const result = await videoService.createVideo({ name, description, id_category, duration });
+    const result = await videoService.createVideo({ name, description, id_category, duration, studios });
 
     if (result instanceof ErrorWithStats) {
         return res.status(result.status).json({ error: { message: result.message } });

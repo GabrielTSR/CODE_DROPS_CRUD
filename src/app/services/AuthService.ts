@@ -4,7 +4,7 @@ import { tokenRepository, userRepository } from '../entity/repositorys/repositor
 import { User } from '../entity/User';
 import { ErrorWithStats } from '../model/ErrorWithStats';
 import transport from '../modules/mailer';
-import { removeBearer, signHash } from '../utils/tokenProvider';
+import { removeBearer, signHash, verifyToken } from '../utils/tokenProvider';
 
 type authenticationRequest = {
     email: string;
@@ -30,6 +30,7 @@ type forgotPasswordRequest = {
 };
 
 type sendPasswordRecoveryEmailRequest = {
+    firstName: string;
     token: string;
     email: string;
 };
@@ -44,7 +45,8 @@ export class AuthService {
         try {
             const user = await userRepository.findOne({
                 where: { email },
-                select: ['id', 'email', 'password', 'created_at', 'permission', 'updated_at', 'updated_at', 'userName'],
+                select: ['id', 'email', 'password', 'created_at', 'updated_at', 'updated_at', 'userName'],
+                relations: ['role'],
             });
 
             if (!user) return new ErrorWithStats('The email or password is incorrect', 401);
@@ -52,10 +54,10 @@ export class AuthService {
             const isValidPassword = await compare(password, user.password);
             if (!isValidPassword) return new ErrorWithStats('The email or password is incorrect', 401);
 
+            delete user.password;
+
             //Creating a token, that expires in 1 hour
             const tokens = signHash({ user });
-
-            delete user.password;
 
             return { user, token: tokens.bearer };
         } catch (error) {
@@ -107,6 +109,7 @@ export class AuthService {
     }
 
     async sendPasswordRecoveryEmail({
+        firstName,
         email,
         token,
     }: sendPasswordRecoveryEmailRequest): Promise<boolean | ErrorWithStats> {
@@ -117,7 +120,7 @@ export class AuthService {
                 to: email,
                 from: 'Intra127',
                 template: 'auth/forgot_password',
-                context: { linkToFollow },
+                context: { linkToFollow, firstName },
             } as MailOptions;
 
             await transport.sendMail(mailerConfig);
@@ -140,7 +143,7 @@ export class AuthService {
                     'id',
                     'email',
                     'created_at',
-                    'permission',
+                    'role',
                     'updated_at',
                     'updated_at',
                     'userName',

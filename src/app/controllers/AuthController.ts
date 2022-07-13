@@ -9,7 +9,7 @@ const tokenService = new TokenService();
 const userService = new UserService();
 
 export async function authenticate(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const { user: email, password } = req.body;
 
     const result = await authService.authenticate({ email, password });
 
@@ -21,6 +21,10 @@ export async function authenticate(req: Request, res: Response) {
     await tokenService.save({ hash: result.token, idUser: result.user.id });
 
     return res.json(result);
+}
+
+export async function getLoggedUser(req: Request, res: Response) {
+    return res.json(req.user);
 }
 
 export async function refresh(req: Request, res: Response) {
@@ -48,7 +52,8 @@ export async function forgotPassword(req: Request, res: Response) {
     }
 
     const emailSent = await authService.sendPasswordRecoveryEmail({
-        email: userWithToken.email,
+        firstName: userWithToken.userName,
+        email,
         token: userWithToken.password_reset_token,
     });
 

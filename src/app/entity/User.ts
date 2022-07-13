@@ -1,5 +1,5 @@
+import { Role } from './Role';
 import {
-    Binary,
     Column,
     Entity,
     PrimaryGeneratedColumn,
@@ -7,10 +7,12 @@ import {
     BeforeUpdate,
     CreateDateColumn,
     UpdateDateColumn,
+    JoinColumn,
+    ManyToOne,
 } from 'typeorm';
 import { hashSync } from 'bcryptjs';
 
-@Entity('user')
+@Entity('tbl_user')
 export class User {
     @PrimaryGeneratedColumn({ name: 'id_user' })
     id: number;
@@ -49,21 +51,24 @@ export class User {
     avatar: string;
 
     @Column({
-        name: 'user_name',
+        name: 'tbl_user_name',
         length: 50,
     })
     userName: string;
 
     @Column({
-        name: 'permission_level',
-        type: 'smallint',
-        default: 0,
+        name: 'id_role',
+        default: 1,
     })
-    permission: number;
+    idRole: number;
 
     @CreateDateColumn()
     created_at: Date;
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @ManyToOne(() => Role)
+    @JoinColumn({ name: 'id_role' })
+    role: Role;
 }
