@@ -28,7 +28,7 @@ export class UserService {
             //Exclusive validation for the creation case
             if (isCreation) {
                 if (!email) return ['Email is empty', 400];
-                if (!password) return ['Password is too empty', 400];
+                if (!password) return ['Password is empty', 400];
                 if (!userName) return ['User name is empty', 400];
             }
 
@@ -53,7 +53,7 @@ export class UserService {
     //This method is used to create a new user
     async createUser({ email, password, userName }: createUserRequest): Promise<User | ErrorWithStats> {
         try {
-            //Checking if the used data is valid
+            //Checking if the incoming data is valid
             const isValidationInvalid = await this.validateData({ email, password, userName, isCreation: true });
 
             //If the validation is invalid, return error

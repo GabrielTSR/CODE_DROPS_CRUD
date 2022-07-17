@@ -12,6 +12,7 @@ import {
 
 import { authUser, canManipulateCategories, canManipulateVideos } from './app/middlewares/authMiddlewares';
 import { Router } from 'express';
+import { deleteLike, likeVideo, videosLikedByMe } from './app/controllers/LikeController';
 
 //Creating router
 const router = Router();
@@ -36,6 +37,11 @@ router.get('/categories', authUser, getAllCategories);
 //Routes for the video controller
 router.post('/videos', authUser, canManipulateVideos, createVideo);
 router.get('/videos', authUser, canManipulateVideos, getAllVideos);
+
+//Routes for the like controller
+router.get('/videos/likes/me', authUser, videosLikedByMe);
+router.post('/videos/:id_video/likes', authUser, likeVideo);
+router.delete('/videos/:id_video/likes', authUser, deleteLike);
 
 //exporting the router
 export { router };

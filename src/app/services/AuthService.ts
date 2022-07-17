@@ -4,10 +4,16 @@ import { tokenRepository, userRepository } from '../entity/repositories/reposito
 import { User } from '../entity/User';
 import { ErrorWithStats } from '../model/ErrorWithStats';
 import transport from '../modules/mailer';
+import { ValidationError } from '../Types/ValidationError';
 import { aleatoryString } from '../utils/aleatoryString';
 import { removeBearer, signHash, verifyToken } from '../utils/tokenProvider';
 
 //Defining all types used
+type validateDataParams = {
+    email: string;
+    password: string;
+};
+
 type authenticationRequest = {
     email: string;
     password: string;
@@ -44,9 +50,27 @@ type validatePasswordResetTokenRequest = {
 
 //Class used to handle the authentication service
 export class AuthService {
+    //This method is used to validate the data used to create or update an authentication
+    async validateData({ email, password }: validateDataParams): Promise<ValidationError | void> {
+        try {
+            if (!email) return ['Email is empty', 400];
+            if (!password) return ['Password is empty', 400];
+        } catch (error) {
+            return [error.message, 400];
+        }
+    }
+
     //This method is used to authenticate a user
     async authenticate({ email, password }: authenticationRequest): Promise<authenticationResponse | ErrorWithStats> {
         try {
+            //Checking if the incoming data is valid
+            const isValidationInvalid = await this.validateData({ email, password });
+
+            //If the validation is invalid, return error
+            if (isValidationInvalid) {
+                return new ErrorWithStats(isValidationInvalid[0], isValidationInvalid[1]);
+            }
+
             //Searching user by email
             const user = await userRepository.findOne({
                 where: { email },
