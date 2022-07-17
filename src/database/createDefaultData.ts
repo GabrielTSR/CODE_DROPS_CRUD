@@ -1,6 +1,7 @@
 import { cityRepository, roleRepository, studioRepository } from '../app/entity/repositories/repositories';
 
 export async function createDefaultData() {
+    //Create default data on the database
     await roleRepository.save([
         {
             id: 1,
