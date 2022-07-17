@@ -1,3 +1,4 @@
+//Instantiating class that has a more intuitive typing to rescue the error, and its due status
 export class ErrorWithStats {
     message: string;
     status: number;

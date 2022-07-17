@@ -1,6 +1,6 @@
-import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 
+//This class represents the connection to the entire database
 export const AppDataSource = new DataSource({
     type: 'mysql',
     host: 'localhost',

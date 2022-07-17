@@ -1,4 +1,4 @@
-import { cityRepository, roleRepository, studioRepository } from '../app/entity/repositorys/repositorys';
+import { cityRepository, roleRepository, studioRepository } from '../app/entity/repositories/repositories';
 
 export async function createDefaultData() {
     await roleRepository.save([

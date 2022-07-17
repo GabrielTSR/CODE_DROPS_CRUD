@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Studio } from './Studio';
 
+////File that defines the Video entity
 @Entity('tbl_video')
 export class Video {
     @PrimaryGeneratedColumn({ name: 'id_video' })

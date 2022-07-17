@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+////File that defines the Role entity
 @Entity('tbl_role')
 export class Role {
     @PrimaryGeneratedColumn({ name: 'id_role' })

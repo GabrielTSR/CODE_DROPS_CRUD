@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { hashSync } from 'bcryptjs';
 
+//File that defines the User entity
 @Entity('tbl_user')
 export class User {
     @PrimaryGeneratedColumn({ name: 'id_user' })
@@ -32,7 +33,7 @@ export class User {
     }
 
     @Column({
-        length: 500,
+        length: 100,
         nullable: true,
         select: false,
     })

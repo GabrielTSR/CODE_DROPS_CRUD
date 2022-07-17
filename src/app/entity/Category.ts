@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
+//File that defines the Category entity
 @Entity('tbl_category')
 export class Category {
     @PrimaryGeneratedColumn({ name: 'id_category' })
