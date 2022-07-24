@@ -70,6 +70,28 @@ export class BaseService<T> {
         }
     }
 
+    //This method is used to get a entity by id
+    async getEntityById(id: number) {
+        try {
+            //Checking if the entity exists
+            let entity = await this.entityRepository.findOne({
+                //@ts-ignore
+                where: { [this.primaryKey]: id },
+            });
+
+            //If the entity does not exist, return an error
+            if (!entity) {
+                return new ErrorWithStats(`${this.entityName} does not exists!`, 404);
+            }
+
+            //Returning the entity
+            return entity;
+        } catch (error) {
+            //If an error occurs, return it
+            return new ErrorWithStats(error.message, 400);
+        }
+    }
+
     //This method is used to create a new entity
     async createEntity({ entityObj }: CreateEntityRequest): Promise<T | ErrorWithStats> {
         try {
