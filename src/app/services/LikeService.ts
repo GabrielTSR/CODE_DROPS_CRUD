@@ -1,10 +1,5 @@
 import { ErrorWithStats } from '../model/ErrorWithStats';
-import {
-    categoryRepository,
-    likeRepository,
-    userRepository,
-    videoRepository,
-} from '../entity/repositories/repositories';
+import { likeRepository, userRepository, videoRepository } from '../entity/repositories/repositories';
 import { Video } from '../entity/Video';
 import { User } from '../entity/User';
 import { Like } from '../entity/Like';
