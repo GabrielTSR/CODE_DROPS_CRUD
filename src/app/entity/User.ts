@@ -33,17 +33,19 @@ export class User {
     }
 
     @Column({
+        name: 'password_reset_token',
         length: 100,
         nullable: true,
         select: false,
     })
-    password_reset_token: string;
+    passwordResetToken: string;
 
     @Column({
+        name: 'password_reset_expires',
         nullable: true,
         select: false,
     })
-    password_reset_expires: Date;
+    passwordResetExpires: Date;
 
     @Column({
         length: 255,
@@ -52,10 +54,15 @@ export class User {
     avatar: string;
 
     @Column({
-        name: 'tbl_user_name',
+        name: 'user_name',
         length: 50,
     })
     userName: string;
+
+    @Column({
+        name: 'birth_date',
+    })
+    birthDate: Date;
 
     @Column({
         name: 'id_role',

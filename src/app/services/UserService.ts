@@ -9,6 +9,7 @@ type createUserRequest = {
     email: string;
     password: string;
     userName: string;
+    birthDate: Date;
 };
 
 //Class used to handle the user service
@@ -16,6 +17,9 @@ export class UserService {
     //This method is used to create a new user
     async createUser(userObj: createUserRequest): Promise<User | ErrorWithStats> {
         try {
+            //Converting the user birth date to Date format
+            userObj.birthDate = new Date(userObj.birthDate);
+
             //Checking if the incoming data is valid
             const isValidationInvalid = await UserValidation({
                 entityObj: userObj,
@@ -86,8 +90,8 @@ export class UserService {
             }
 
             //Settinh the password reset token to null
-            user.password_reset_token = null;
-            user.password_reset_expires = null;
+            user.passwordResetToken = null;
+            user.passwordResetExpires = null;
 
             //Saving the user in database
             await userRepository.save(user);

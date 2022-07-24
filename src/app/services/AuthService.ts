@@ -128,8 +128,8 @@ export class AuthService {
             expirationTime.setHours(expirationTime.getHours() + 1);
 
             //Updating the instance of user with the new token and the expiration time
-            user.password_reset_expires = expirationTime;
-            user.password_reset_token = token;
+            user.passwordResetExpires = expirationTime;
+            user.passwordResetToken = token;
 
             //Saving the instance of user to database
             await userRepository.save(user);
@@ -179,7 +179,7 @@ export class AuthService {
         try {
             //Searching user by email, and passwordResetToken
             const user = await userRepository.findOne({
-                where: { email, password_reset_token: token },
+                where: { email, passwordResetToken: token },
                 select: [
                     'id',
                     'email',
@@ -188,8 +188,8 @@ export class AuthService {
                     'updated_at',
                     'updated_at',
                     'userName',
-                    'password_reset_token',
-                    'password_reset_expires',
+                    'passwordResetToken',
+                    'passwordResetExpires',
                 ],
             });
 
@@ -198,7 +198,7 @@ export class AuthService {
 
             //Checking if the token is expired
             const now = new Date();
-            if (now > user.password_reset_expires) return new ErrorWithStats('This token is expired', 401);
+            if (now > user.passwordResetExpires) return new ErrorWithStats('This token is expired', 401);
 
             //Returning the user
             return user;

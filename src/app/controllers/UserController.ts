@@ -8,10 +8,10 @@ const userService = new UserService();
 //This function is used to create an user
 export async function store(req: Request, res: Response) {
     //Getting the data from the request body
-    const { email, password, userName } = req.body;
+    const userObj = req.body;
 
     //Using the UserService to create an user
-    const result = await userService.createUser({ email, password, userName });
+    const result = await userService.createUser(userObj);
 
     //If an error occurred, return it
     if (result instanceof ErrorWithStats) {

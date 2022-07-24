@@ -7,7 +7,7 @@ type EntityObj = {
     email?: string;
     password?: string;
     userName?: string;
-    isCreation?: boolean;
+    birthDate?: Date;
 };
 
 type ValidateDataFunctionArgs = {
@@ -22,13 +22,14 @@ export async function UserValidation({
 }: ValidateDataFunctionArgs): Promise<ValidationError | void> {
     try {
         //Desestructuring the entityObj
-        const { email, password, userName, isCreation } = entityObj;
+        const { email, password, userName, birthDate } = entityObj;
 
         //Exclusive validation for the creation case
-        if (isCreation) {
-            if (!email) return ['Email is empty', 400];
-            if (!password) return ['Password is empty', 400];
-            if (!userName) return ['User name is empty', 400];
+        if (intention === 'post') {
+            if (!email) return ['Email is empty', 422];
+            if (!password) return ['Password is empty', 422];
+            if (!userName) return ['User name is empty', 422];
+            if (!birthDate) return ['Birth date is empty', 422];
         }
 
         if (email) {
@@ -41,8 +42,12 @@ export async function UserValidation({
         }
 
         if (userName) {
-            if (!userName.length && isCreation) return ['User name size is invalid', 400];
+            if (!userName.length) return ['User name size is invalid', 400];
             if (userName.length > 50) return ['User name is too long, the maximum is 50 characters', 400];
+        }
+
+        if (birthDate) {
+            if (birthDate.getTime() > new Date().getTime()) return ['Birth date is invalid', 400];
         }
     } catch (error) {
         return [error.message, 400];

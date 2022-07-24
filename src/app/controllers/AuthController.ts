@@ -72,7 +72,7 @@ export async function forgotPassword(req: Request, res: Response) {
     const emailSent = await authService.sendPasswordRecoveryEmail({
         firstName: userWithToken.userName,
         email,
-        token: userWithToken.password_reset_token,
+        token: userWithToken.passwordResetToken,
     });
 
     //If an error occurred, return it
