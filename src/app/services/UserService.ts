@@ -2,8 +2,8 @@ import { ErrorWithStats } from '../model/ErrorWithStats';
 import { User } from '../entity/User';
 
 import { userRepository } from '../entity/repositories/repositories';
-import { isEmailValid } from '../validation/isEmailValid';
-import { isPasswordValid } from '../validation/isPasswordValid';
+import { isEmailValid } from '../utils/validation/isEmailValid';
+import { isPasswordValid } from '../utils/validation/isPasswordValid';
 import { ValidationError } from '../Types/ValidationError';
 
 //Defining all types used
@@ -23,7 +23,12 @@ type validateDataParams = {
 //Class used to handle the user service
 export class UserService {
     //This method is used to validate the data used to create or update an user
-    async validateData({ email, password, userName, isCreation }: validateDataParams): Promise<ValidationError | void> {
+    private async validateData({
+        email,
+        password,
+        userName,
+        isCreation,
+    }: validateDataParams): Promise<ValidationError | void> {
         try {
             //Exclusive validation for the creation case
             if (isCreation) {

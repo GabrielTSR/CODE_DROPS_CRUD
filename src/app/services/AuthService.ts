@@ -51,7 +51,7 @@ type validatePasswordResetTokenRequest = {
 //Class used to handle the authentication service
 export class AuthService {
     //This method is used to validate the data used to create or update an authentication
-    async validateData({ email, password }: validateDataParams): Promise<ValidationError | void> {
+    private async validateData({ email, password }: validateDataParams): Promise<ValidationError | void> {
         try {
             if (!email) return ['Email is empty', 400];
             if (!password) return ['Password is empty', 400];

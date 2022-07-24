@@ -59,6 +59,17 @@ export class LikeService {
                 //Getting the number of likes of the video
                 const likesQuantity = await likeRepository.count({ where: { id_video: video.id } });
 
+                //If there are no likes, the video is added to the array with 0 likes
+                if (!likesQuantity) {
+                    videosWithLikesAndLikers.push({
+                        ...video,
+                        likes: 0,
+                        likers: [],
+                    });
+
+                    continue;
+                }
+
                 //Getting the users who liked the video, with no repetitions, and saying how many times they liked it
                 const likes = await likeRepository.find({
                     where: { id_video: video.id },

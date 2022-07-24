@@ -3,7 +3,7 @@ import './database';
 import morgan from 'morgan';
 import express from 'express';
 import cors from 'cors';
-import { router } from './routes';
+import { routes } from './routes';
 
 //Creating express app
 const app = express();
@@ -25,7 +25,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 //Using the router
-app.use(router);
+app.use('/api', routes);
 
 //Initializing the server
 const port = 3333;

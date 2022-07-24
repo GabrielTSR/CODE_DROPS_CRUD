@@ -1,7 +1,7 @@
 import { ErrorWithStats } from '../model/ErrorWithStats';
 import { Request, Response } from 'express';
 import { LikeService } from '../services/LikeService';
-import { isIdValid } from '../validation/isIdValid';
+import { isIdValid } from '../utils/validation/isIdValid';
 
 //Instantiating the services used
 const likeService = new LikeService();

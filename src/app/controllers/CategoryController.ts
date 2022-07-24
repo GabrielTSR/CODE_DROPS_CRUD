@@ -1,15 +1,25 @@
+import { categoryRepository } from './../entity/repositories/repositories';
 import { ErrorWithStats } from './../model/ErrorWithStats';
 import { Request, Response } from 'express';
 import { CategoryService } from '../services/CategoryService';
-import { isIdValid } from '../validation/isIdValid';
+import { isIdValid } from '../utils/validation/isIdValid';
+import { BaseService } from '../services/default/BaseService';
+import { CategoryValidation } from '../validation/CategoryValidation';
+import { Category } from '../entity/Category';
 
 //Instantiating the services used
-const categoryService = new CategoryService();
+const baseService = new BaseService<Category>({
+    validateDataFunction: CategoryValidation,
+    entity: {
+        repository: categoryRepository,
+        name: 'Category',
+    },
+});
 
 //This function is used to get all the categories
-async function getAllCategories(req: Request, res: Response) {
-    //Using CategoryService to get all the categories
-    const result = await categoryService.getAllCategories();
+export async function getAllCategories(req: Request, res: Response) {
+    //Using BaseService to get all the categories
+    const result = await baseService.getAllEntities();
 
     //If an error occurred, return it
     if (result instanceof ErrorWithStats) return res.status(result.status).json({ error: { message: result.message } });
@@ -19,12 +29,9 @@ async function getAllCategories(req: Request, res: Response) {
 }
 
 //This function is used to create a new category
-async function createCategory(req: Request, res: Response) {
-    //Getting the data from the request body
-    const { name, description } = req.body;
-
-    //Using CategoryService to create a new category
-    const result = await categoryService.createCategory({ name, description });
+export async function createCategory(req: Request, res: Response) {
+    //Using BategoryService to create a new category
+    const result = await baseService.createEntity({ entityObj: req.body });
 
     //If an error occurred, return it
     if (result instanceof ErrorWithStats) {
@@ -36,18 +43,15 @@ async function createCategory(req: Request, res: Response) {
 }
 
 //This function is used to update a category
-async function updateCategory(req: Request, res: Response) {
+export async function updateCategory(req: Request, res: Response) {
     //Getting id from params
     const { id } = req.params;
-
-    //Getting the data from the request body
-    const { name, description } = req.body;
 
     //Checking if the id is a number
     if (!isIdValid(id)) return res.status(400).json({ error: { message: 'Invalid category id' } });
 
-    //Using CategoryService to update a category
-    const result = await categoryService.updateCategory({ id: Number(id), name, description });
+    //Using BategoryService to update a category
+    const result = await baseService.updateEntity({ id: Number(id), entityObj: req.body, intention: 'put' });
 
     //If an error occurred, return it
     if (result instanceof ErrorWithStats) {
@@ -58,15 +62,35 @@ async function updateCategory(req: Request, res: Response) {
     return res.json(result);
 }
 
-async function deleteCategory(req: Request, res: Response) {
+//This function is used to change a category attribute
+export async function changeCategoryAttribute(req: Request, res: Response) {
     //Getting id from params
     const { id } = req.params;
 
     //Checking if the id is a number
     if (!isIdValid(id)) return res.status(400).json({ error: { message: 'Invalid category id' } });
 
-    //Using CategoryService to delete a category
-    const result = await categoryService.deleteCategory(Number(id));
+    //Using BategoryService to update a category
+    const result = await baseService.updateEntity({ id: Number(id), entityObj: req.body, intention: 'patch' });
+
+    //If an error occurred, return it
+    if (result instanceof ErrorWithStats) {
+        return res.status(result.status).json({ error: { message: result.message } });
+    }
+
+    //Returning the category
+    return res.json(result);
+}
+
+export async function deleteCategory(req: Request, res: Response) {
+    //Getting id from params
+    const { id } = req.params;
+
+    //Checking if the id is a number
+    if (!isIdValid(id)) return res.status(400).json({ error: { message: 'Invalid category id' } });
+
+    //Using BaseService to delete a category
+    const result = await baseService.deleteEntity(Number(id));
 
     //If an error occurred, return it
     if (result instanceof ErrorWithStats) {
@@ -76,5 +100,3 @@ async function deleteCategory(req: Request, res: Response) {
     //Returning the success response
     return res.status(204).end();
 }
-
-export { getAllCategories, createCategory, updateCategory, deleteCategory };
