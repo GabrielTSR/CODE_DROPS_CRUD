@@ -2,9 +2,6 @@ import { ErrorWithStats } from '../model/ErrorWithStats';
 import { User } from '../entity/User';
 
 import { userRepository } from '../entity/repositories/repositories';
-import { isEmailValid } from '../utils/validation/isEmailValid';
-import { isPasswordValid } from '../utils/validation/isPasswordValid';
-import { ValidationError } from '../Types/ValidationError';
 import { UserValidation } from '../validation/UserValidation';
 
 //Defining all types used

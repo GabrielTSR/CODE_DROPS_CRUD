@@ -4,9 +4,8 @@ import { tokenRepository, userRepository } from '../entity/repositories/reposito
 import { User } from '../entity/User';
 import { ErrorWithStats } from '../model/ErrorWithStats';
 import transport from '../modules/mailer';
-import { ValidationError } from '../Types/ValidationError';
 import { aleatoryString } from '../utils/aleatoryString';
-import { removeBearer, signHash, verifyToken } from '../utils/tokenProvider';
+import { removeBearer, signHash } from '../utils/tokenProvider';
 import { AuthValidation } from '../validation/AuthValidation';
 
 //Defining all types used
