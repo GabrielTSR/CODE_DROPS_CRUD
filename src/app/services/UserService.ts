@@ -5,6 +5,7 @@ import { userRepository } from '../entity/repositories/repositories';
 import { isEmailValid } from '../utils/validation/isEmailValid';
 import { isPasswordValid } from '../utils/validation/isPasswordValid';
 import { ValidationError } from '../Types/ValidationError';
+import { UserValidation } from '../validation/UserValidation';
 
 //Defining all types used
 type createUserRequest = {
@@ -13,53 +14,16 @@ type createUserRequest = {
     userName: string;
 };
 
-type validateDataParams = {
-    email: string;
-    password: string;
-    userName: string;
-    isCreation: boolean;
-};
-
 //Class used to handle the user service
 export class UserService {
-    //This method is used to validate the data used to create or update an user
-    private async validateData({
-        email,
-        password,
-        userName,
-        isCreation,
-    }: validateDataParams): Promise<ValidationError | void> {
-        try {
-            //Exclusive validation for the creation case
-            if (isCreation) {
-                if (!email) return ['Email is empty', 400];
-                if (!password) return ['Password is empty', 400];
-                if (!userName) return ['User name is empty', 400];
-            }
-
-            if (email) {
-                if (!isEmailValid(email)) return ['Email is invalid', 400];
-                if (await userRepository.findOne({ where: { email } })) return ['This email is already in use', 409];
-            }
-
-            if (password) {
-                if (!isPasswordValid(password)) return ['Password is invalid', 400];
-            }
-
-            if (userName) {
-                if (!userName.length && isCreation) return ['User name size is invalid', 400];
-                if (userName.length > 50) return ['User name is too long, the maximum is 50 characters', 400];
-            }
-        } catch (error) {
-            return [error.message, 400];
-        }
-    }
-
     //This method is used to create a new user
-    async createUser({ email, password, userName }: createUserRequest): Promise<User | ErrorWithStats> {
+    async createUser(userObj: createUserRequest): Promise<User | ErrorWithStats> {
         try {
             //Checking if the incoming data is valid
-            const isValidationInvalid = await this.validateData({ email, password, userName, isCreation: true });
+            const isValidationInvalid = await UserValidation({
+                entityObj: userObj,
+                intention: 'post',
+            });
 
             //If the validation is invalid, return error
             if (isValidationInvalid) {
@@ -67,7 +31,7 @@ export class UserService {
             }
 
             //Creating an user instance
-            const user = userRepository.create({ email, password, userName });
+            const user = userRepository.create(userObj);
 
             //Saving the user in database
             await userRepository.insert(user);
@@ -81,10 +45,10 @@ export class UserService {
     }
 
     //This method is used to update an user
-    async updateUser({ id, userName, email, password }: User) {
+    async updateUser(userObj: User) {
         try {
             //Checking if the used data is valid
-            const isValidationInvalid = await this.validateData({ userName, email, password, isCreation: false });
+            const isValidationInvalid = await UserValidation({ entityObj: userObj, intention: 'patch' });
 
             //If the validation is invalid, return error
             if (isValidationInvalid) {
@@ -92,7 +56,7 @@ export class UserService {
             }
 
             //Finding the user to update
-            const user = await userRepository.findOne({ where: { id } });
+            const user = await userRepository.findOne({ where: { id: userObj.id } });
 
             //If the user does not exists, return error
             if (!user) {
@@ -100,9 +64,7 @@ export class UserService {
             }
 
             //Updating the user with the incoming data
-            user.userName = userName ? userName : user.userName;
-            user.email = email ? email : user.email;
-            user.password = password ? password : user.password;
+            userObj = userRepository.merge(user, userObj);
 
             //Saving the user in database
             await userRepository.save(user);

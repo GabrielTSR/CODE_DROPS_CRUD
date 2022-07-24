@@ -39,7 +39,7 @@ export class BaseService<T> {
         this.entityRepository = repository;
 
         //If a validate data function is provided, use it, else, use a function that does not have any validation
-        this.validateDataFunction = validateDataFunction ? validateDataFunction : (args) => Promise.resolve();
+        this.validateDataFunction = validateDataFunction ? validateDataFunction : () => Promise.resolve();
 
         //If a primary key is provided, set it, otherwise use the default
         this.primaryKey = primaryKey ? primaryKey : 'id';
@@ -142,7 +142,7 @@ export class BaseService<T> {
 
             if (intention === 'patch') {
                 //Updating the entity with the data that was sent
-                entityObj = await this.entityRepository.merge(entity, entityObj);
+                entityObj = this.entityRepository.merge(entity, entityObj);
             }
 
             //Saving the entity
