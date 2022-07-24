@@ -1,7 +1,6 @@
 import { categoryRepository } from './../entity/repositories/repositories';
 import { ErrorWithStats } from './../model/ErrorWithStats';
 import { Request, Response } from 'express';
-import { CategoryService } from '../services/CategoryService';
 import { isIdValid } from '../utils/validation/isIdValid';
 import { BaseService } from '../services/default/BaseService';
 import { CategoryValidation } from '../validation/CategoryValidation';
